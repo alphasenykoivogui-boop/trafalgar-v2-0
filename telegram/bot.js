@@ -14,6 +14,7 @@ const status = require("./commands/status")
 const logout = require("./commands/logout")
 const stats = require("./commands/stats")
 const broadcast = require("./commands/broadcast")
+const stop = require("./commands/stop")
 
 const TOKEN = "8721224684:AAHessSC-Z_Cqh90omGyphZyni4VEizhGYc";
 
@@ -67,6 +68,18 @@ bot,
 msg.chat.id,
 number.replace(/[^0-9]/g, "")
 
+)
+
+})
+
+bot.onText(/\/stop (.+)/, async (msg, match) => {
+
+const number = match[1]
+
+stop.run(
+bot,
+msg.chat.id,
+number
 )
 
 })
