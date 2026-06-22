@@ -4,6 +4,23 @@ exports.run = async (bot, chatId, number) => {
 
 try {
 
+if (!number) {
+
+return bot.sendMessage(
+
+chatId,
+
+`╭━━━〔 ⚠️ NUMBER ⚠️ 〕━━━⬣
+┃
+┃ Exemple :
+┃ /stop 224XXXXXXXX
+┃
+╰━━━━━━━━━━━━━━━━⬣`
+
+)
+
+}
+
 if (!activeUsers.has(number)) {
 
 return bot.sendMessage(
@@ -12,7 +29,7 @@ chatId,
 
 `╭━━━〔 ⚠️ SYSTEM ⚠️ 〕━━━⬣
 ┃
-┃ ❌ Aucune protection active.
+┃ Aucune protection active.
 ┃
 ╰━━━━━━━━━━━━━━━━⬣`
 
@@ -30,9 +47,8 @@ chatId,
 ┃
 ┃ ✅ TRAFALGAROFF ARRÊTÉ
 ┃
-┃ ⚡ Protection désactivée
-┃
-┃ 🔓 Cycle terminé
+┃ Numéro :
+┃ ${number}
 ┃
 ╰━━━━━━━━━━━━━━━━⬣`
 
@@ -43,18 +59,6 @@ chatId,
 catch (err) {
 
 console.log(err)
-
-bot.sendMessage(
-
-chatId,
-
-`╭━━━〔 ❌ ERROR ❌ 〕━━━⬣
-┃
-┃ Une erreur est survenue.
-┃
-╰━━━━━━━━━━━━━━━━⬣`
-
-)
 
 }
 
