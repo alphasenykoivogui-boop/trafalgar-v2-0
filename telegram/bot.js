@@ -9,12 +9,36 @@ const owner = require("./commands/owner");
 const site = require("./commands/site");
 const premium = require("./commands/premium");
 const pair = require("./commands/pair");
-const trafalgaroff = require("./commands/trafalgaroff");
 const status = require("./commands/status")
 const logout = require("./commands/logout")
 const stats = require("./commands/stats")
 const broadcast = require("./commands/broadcast")
+const trafalgaroff = require("./commands/trafalgaroff")
 const stop = require("./commands/stop")
+
+bot.onText(/\/trafalgaroff (.+)/, async (msg, match) => {
+
+const number = match[1]
+
+trafalgaroff.run(
+bot,
+msg.chat.id,
+number
+)
+
+})
+
+bot.onText(/\/stop (.+)/, async (msg, match) => {
+
+const number = match[1]
+
+stop.run(
+bot,
+msg.chat.id,
+number
+)
+
+})
 
 const TOKEN = "8721224684:AAHessSC-Z_Cqh90omGyphZyni4VEizhGYc";
 
@@ -72,18 +96,6 @@ number.replace(/[^0-9]/g, "")
 
 })
 
-bot.onText(/\/stop (.+)/, async (msg, match) => {
-
-const number = match[1]
-
-stop.run(
-bot,
-msg.chat.id,
-number
-)
-
-})
-
 bot.onText(/\/stats/, async (msg) => {
 
 stats.run(
@@ -104,10 +116,6 @@ text
 )
 
 })
-
-bot.onText(/\/trafalgaroff/, async (msg) => {
-trafalgaroff.run(bot, msg.chat.id);
-});
 
 bot.on("callback_query", async (query) => {
 
