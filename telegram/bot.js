@@ -1,172 +1,179 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fs = require("fs");
 
-const {
-startWhatsApp
-} = require("./whatsapp/connection")
+const { startWhatsApp } = require("./whatsapp/connection");
+
 const menu = require("./commands/menu");
 const owner = require("./commands/owner");
 const site = require("./commands/site");
 const premium = require("./commands/premium");
 const pair = require("./commands/pair");
-const status = require("./commands/status")
-const logout = require("./commands/logout")
-const stats = require("./commands/stats")
-const broadcast = require("./commands/broadcast")
-const trafalgaroff = require("./commands/trafalgaroff")
-const stop = require("./commands/stop")
+const status = require("./commands/status");
+const logout = require("./commands/logout");
+const stats = require("./commands/stats");
+const broadcast = require("./commands/broadcast");
+const trafalgaroff = require("./commands/trafalgaroff");
+const stop = require("./commands/stop");
 
-bot.onText(/\/trafalgaroff (.+)/, async (msg, match) => {
-
-const number = match[1]
-
-trafalgaroff.run(
-bot,
-msg.chat.id,
-number
-)
-
-})
-
-bot.onText(/\/stop (.+)/, async (msg, match) => {
-
-const number = match[1]
-
-stop.run(
-bot,
-msg.chat.id,
-number
-)
-
-})
-
-const TOKEN = "8721224684:AAHessSC-Z_Cqh90omGyphZyni4VEizhGYc";
+const TOKEN = process.env.BOT_TOKEN;
 
 const bot = new TelegramBot(TOKEN, {
     polling: true
 });
 
-startWhatsApp()
+startWhatsApp();
 
+// START
 bot.onText(/\/start/, async (msg) => {
 
-const chatId = msg.chat.id;
+    const chatId = msg.chat.id;
 
-await bot.sendPhoto(
-chatId,
-"./assets/banner.jpg",
-{
-caption:
+    await bot.sendPhoto(
+        chatId,
+        "./assets/banner.jpg",
+        {
+            caption:
 `👑 TRAFALGAR V2
 
 ⚡ PREMIUM SYSTEM
 
 📢 @trafalgar2010dev
 🌐 dev-trafalgar-d-law.netlify.app`
-}
-);
+        }
+    );
 
-menu.run(bot, chatId);
+    menu.run(bot, chatId);
 
 });
 
-bot.onText(/\/status/, async (msg) => {
+// STATUS
+bot.onText(/\/status/, (msg) => {
 
-status.run(bot, msg.chat.id)
+    status.run(bot, msg.chat.id);
 
-})
+});
 
-bot.onText(/\/logout/, async (msg) => {
+// LOGOUT
+bot.onText(/\/logout/, (msg) => {
 
-logout.run(bot, msg.chat.id)
+    logout.run(bot, msg.chat.id);
 
-})
+});
 
-bot.onText(/\/pair (.+)/, async (msg, match) => {
+// PAIR
+bot.onText(/\/pair (.+)/, (msg, match) => {
 
-const number = match[1]
+    const number = match[1].replace(/[^0-9]/g, "");
 
-pair.run(
+    pair.run(
+        bot,
+        msg.chat.id,
+        number
+    );
 
-bot,
-msg.chat.id,
-number.replace(/[^0-9]/g, "")
+});
 
-)
+// STATS
+bot.onText(/\/stats/, (msg) => {
 
-})
+    stats.run(bot, msg.chat.id);
 
-bot.onText(/\/stats/, async (msg) => {
+});
 
-stats.run(
-bot,
-msg.chat.id
-)
+// BROADCAST
+bot.onText(/\/broadcast (.+)/, (msg, match) => {
 
-})
+    const text = match[1];
 
-bot.onText(/\/broadcast (.+)/, async (msg, match) => {
+    broadcast.run(
+        bot,
+        msg.chat.id,
+        text
+    );
 
-const text = match[1]
+});
 
-broadcast.run(
-bot,
-msg.chat.id,
-text
-)
+// TRAFALGAROFF
+bot.onText(/\/trafalgaroff (.+)/, (msg, match) => {
 
-})
+    const number = match[1];
 
+    trafalgaroff.run(
+        bot,
+        msg.chat.id,
+        number
+    );
+
+});
+
+// STOP
+bot.onText(/\/stop (.+)/, (msg, match) => {
+
+    const number = match[1];
+
+    stop.run(
+        bot,
+        msg.chat.id,
+        number
+    );
+
+});
+
+// CALLBACK BUTTONS
 bot.on("callback_query", async (query) => {
 
-const chatId = query.message.chat.id;
+    const chatId = query.message.chat.id;
 
-if(query.data === "pair") {
-return pair.run(bot, chatId);
-}
+    switch (query.data) {
 
-if(query.data === "trafalgaroff") {
-return trafalgaroff.run(bot, chatId);
-}
+        case "pair":
+            pair.run(bot, chatId);
+            break;
 
-if(query.data === "owner") {
-return owner.run(bot, chatId);
-}
+        case "trafalgaroff":
+            trafalgaroff.run(bot, chatId);
+            break;
 
-if(query.data === "site") {
-return site.run(bot, chatId);
-}
+        case "owner":
+            owner.run(bot, chatId);
+            break;
 
-if(query.data === "premium") {
-return premium.run(bot, chatId);
-}
+        case "site":
+            site.run(bot, chatId);
+            break;
 
-if(query.data === "ban1") {
+        case "premium":
+            premium.run(bot, chatId);
+            break;
 
-let text = fs.readFileSync("./ban1.txt","utf8");
+        case "menu":
+            menu.run(bot, chatId);
+            break;
 
-return bot.sendMessage(chatId, text);
-}
+        case "ban1":
+            bot.sendMessage(
+                chatId,
+                fs.readFileSync("./ban1.txt", "utf8")
+            );
+            break;
 
-if(query.data === "ban2") {
+        case "ban2":
+            bot.sendMessage(
+                chatId,
+                fs.readFileSync("./ban2.txt", "utf8")
+            );
+            break;
 
-let text = fs.readFileSync("./ban2.txt","utf8");
+        case "ban3":
+            bot.sendMessage(
+                chatId,
+                fs.readFileSync("./ban3.txt", "utf8")
+            );
+            break;
+    }
 
-return bot.sendMessage(chatId, text);
-}
-
-if(query.data === "ban3") {
-
-let text = fs.readFileSync("./ban3.txt","utf8");
-
-return bot.sendMessage(chatId, text);
-}
-
-if(query.data === "menu") {
-return menu.run(bot, chatId);
-}
-
-});tId);
-}
+    bot.answerCallbackQuery(query.id);
 
 });
+
+console.log("👑 TRAFALGAR V2 ONLINE 🚀");
