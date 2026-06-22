@@ -1,9 +1,8 @@
 const { getSocket } = require("../whatsapp/connection")
 
 const activeUsers = new Set()
-let stopProtection = false
 
-exports.run = async (bot, chatId, number) => {
+async function run(bot, chatId, number) {
 
 try {
 
@@ -18,6 +17,25 @@ chatId,
 `╭━━━〔 ❌ TRAFALGAR V2 ❌ 〕━━━⬣
 ┃
 ┃ WhatsApp n'est pas connecté.
+┃
+╰━━━━━━━━━━━━━━━━⬣`
+
+)
+
+}
+
+if (!number) {
+
+return bot.sendMessage(
+
+chatId,
+
+`╭━━━〔 ⚠️ NUMBER ⚠️ 〕━━━⬣
+┃
+┃ Veuillez fournir un numéro.
+┃    À bannir🪬
+┃ Exemple :
+┃ /trafalgaroff 224XXXXXXXX
 ┃
 ╰━━━━━━━━━━━━━━━━⬣`
 
@@ -54,13 +72,16 @@ chatId,
 ┃ 🔒 Blocage/Déblocage
 ┃ toutes les 5 secondes
 ┃
-┃ 🛑 Arrêt : /stop
+┃ 🛑 Arrêt :
+┃ /stop ${number}
 ┃
 ╰━━━━━━━━━━━━━━━━⬣`
 
 )
 
-while (!stopProtection) {
+console.log(`Cycle démarré : ${number}`)
+
+while (activeUsers.has(number)) {
 
 await sock.updateBlockStatus(
 number + "@s.whatsapp.net",
@@ -73,6 +94,8 @@ await new Promise(resolve =>
 setTimeout(resolve, 5000)
 )
 
+if (!activeUsers.has(number)) break
+
 await sock.updateBlockStatus(
 number + "@s.whatsapp.net",
 "unblock"
@@ -82,13 +105,12 @@ console.log(`Débloqué : ${number}`)
 
 await new Promise(resolve =>
 setTimeout(resolve, 5000)
+
 )
 
 }
 
-stopProtection = false
-
-activeUsers.delete(number)
+console.log(`Cycle terminé : ${number}`)
 
 }
 
@@ -110,4 +132,9 @@ chatId,
 
 }
 
+}
+
+module.exports = {
+run,
+activeUsers
 }
