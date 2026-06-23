@@ -18,7 +18,7 @@ const stop = require("./telegram/commands/stop");
 const TOKEN = process.env.BOT_TOKEN;
 
 if (!TOKEN) {
-    console.log("❌ BOT_TOKEN manquant");
+    console.log("8721224684:AAHessSC-Z_Cqh90omGyphZyni4VEizhGYc");
     process.exit(1);
 }
 
@@ -144,7 +144,7 @@ bot.on("callback_query", async (query) => {
 
 Exemple :
 
-/pair 224621234567
+/pair 224620503751
 
 ⚡ Génère un code WhatsApp sécurisé.`
             );
