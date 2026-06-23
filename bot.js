@@ -18,7 +18,7 @@ const stop = require("./telegram/commands/stop");
 const TOKEN = process.env.BOT_TOKEN;
 
 if (!TOKEN) {
-    console.log("8721224684:AAHessSC-Z_Cqh90omGyphZyni4VEizhGYc");
+    console.log("8805864768:AAEhA5tiEsqIiMGwygOTolam_9vN7snrOPU");
     process.exit(1);
 }
 
