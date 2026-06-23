@@ -32,4 +32,4 @@ inline_keyboard: [
 );
 
 }
-};
+});
