@@ -2,92 +2,101 @@ const { getSocket } = require("../whatsapp/connection")
 
 exports.run = async (bot, chatId, number) => {
 
-try {
+    try {
 
-const sock = getSocket()
+        const sock = getSocket()
 
-if (!sock) {
+        if (!sock) {
 
-return bot.sendMessage(
+            return bot.sendMessage(
+                chatId,
+`╔══════════════════════════════╗
+║        👑 TRAFALGAR V2       ║
+╠══════════════════════════════╣
+║ ❌ WHATSAPP NON CONNECTÉ     ║
+║                              ║
+║ 🔄 Veuillez patienter...     ║
+╚══════════════════════════════╝`
+            )
 
-chatId,
+        }
 
-`╭━━〔 ❌ TRAFALGAR V2 ❌ 〕━━╮
+        if (!number) {
 
-⚠️ WhatsApp n'est pas encore connecté.
+            return bot.sendMessage(
+                chatId,
+`╔══════════════════════════════╗
+║         📱 UTILISATION       ║
+╠══════════════════════════════╣
+║ /pair 224XXXXXXXX            ║
+╚══════════════════════════════╝`
+            )
 
-🔄 Veuillez patienter...
+        }
 
-╰━━━━━━━━━━━━━━━━━━━━━━╯`
+        const loading = await bot.sendMessage(
+            chatId,
+`╭━━━━━━━━━━━━━━━━━━━━━━━╮
+┃ 👑 TRAFALGAR DEV ┃
+╰━━━━━━━━━━━━━━━━━━━━━━━╯
 
-)
+⚡ Connexion aux serveurs...
+📡 Synchronisation WhatsApp...
+🔐 Génération du Pair Code...
+⏳ Veuillez patienter...`
+        )
 
-}
+        const code = await sock.requestPairingCode(number)
 
-await bot.sendMessage(
+        await bot.editMessageText(
+`╔══════════════════════════════╗
+║      👑 TRAFALGAR V2 👑      ║
+╠══════════════════════════════╣
+║      🔐 PAIRING CODE         ║
+╚══════════════════════════════╝
 
-chatId,
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  🎟️ ${code}
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-`╭━━〔 ⏳ GENERATION DU CODE ⏳ 〕━━╮
+📱 NUMÉRO
+➜ +${number}
 
-📱 Numéro :
-+${number}
+━━━━━━━━━━━━━━━━━━━━━━
 
-⚡ Préparation du code...
+🟢 Code généré avec succès
+🛡️ Session protégée
+⚡ Pair System
+🚀 WhatsApp Ready
 
-╰━━━━━━━━━━━━━━━━━━━━━━╯`
+━━━━━━━━━━━━━━━━━━━━━━
 
-)
+👨‍💻 Developer :
+@trafalgar2010dev
 
-const code = await sock.requestPairingCode(number)
+🌐 Trafalgar V2`,
+            {
+                chat_id: chatId,
+                message_id: loading.message_id
+            }
+        )
 
-return bot.sendMessage(
+    } catch (err) {
 
-chatId,
+        console.log(err)
 
-`╭━━〔 👑 TRAFALGAR V2 🎭 〕━━╮
-
-🔐 CODE DE PAIRING
-
-➜ ${code}
-
-━━━━━━━━━━━━━━━━━━
-
-📱 Numéro :
-+${number}
-
-🛡️ Session sécurisée
-⚡ Premium Pair System
-🚀 Profite bien !
-
-╰━━━━━━━━━━━━━━━━━━━━━━╯`
-
-)
-
-}
-
-catch (e) {
-
-console.log(e)
-
-return bot.sendMessage(
-
-chatId,
-
-`╭━━〔 ❌ ERROR ❌ 〕━━╮
-
-⚠️ Impossible de générer le code.
-
-📌 Vérifie le numéro et réessaie.
-
-╰━━━━━━━━━━━━━━━━━━━━━━╯`
-
-)
-
-}
-
-}��━━━━━━━━━━━━━━━━━━━━━╯`
-
+        return bot.sendMessage(
+            chatId,
+`╔══════════════════════════════╗
+║         ❌ ERREUR ❌         ║
+╠══════════════════════════════╣
+║ Impossible de générer        ║
+║ le code de connexion.        ║
+╠══════════════════════════════╣
+║ ✔ Vérifie le numéro          ║
+║ ✔ Vérifie WhatsApp           ║
+║ ✔ Réessaie plus tard         ║
+╚══════════════════════════════╝`
         )
 
     }
