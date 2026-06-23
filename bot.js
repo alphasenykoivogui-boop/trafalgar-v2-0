@@ -31,38 +31,95 @@ startWhatsApp();
 bot.onText(/\/start/, async (msg) => {
 
     const chatId = msg.chat.id;
+    const userId = msg.from.id;
 
-    if (fs.existsSync("./assets/banner.jpg")) {
+    try {
 
-        await bot.sendPhoto(
-            chatId,
-            "./assets/banner.jpg",
-            {
-                caption:
-`👑 TRAFALGAR V2
-
-⚡ PREMIUM SYSTEM
-
-📢 @trafalgar2010dev
-🌐 dev-trafalgar-d-law.netlify.app`
-            }
+        const member = await bot.getChatMember(
+            CHANNEL,
+            userId
         );
 
-    } else {
+        const allowed = [
+            "creator",
+            "administrator",
+            "member"
+        ];
 
-        await bot.sendMessage(
-            chatId,
+        if (!allowed.includes(member.status)) {
+
+            return bot.sendMessage(
+                chatId,
+
 `👑 TRAFALGAR V2
 
-⚡ PREMIUM SYSTEM
+━━━━━━━━━━━━━━━━━━
 
-📢 @trafalgar2010dev
-🌐 dev-trafalgar-d-law.netlify.app`
+🔒 ACCÈS PROTÉGÉ
+
+Pour accéder au panel premium,
+vous devez rejoindre notre canal officiel.
+
+💎 Premium Community
+⚡ Exclusive Updates
+🚀 Official Network
+
+━━━━━━━━━━━━━━━━━━
+
+📢 Rejoignez puis cliquez sur
+« Vérifier »`,
+
+                {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [
+                                {
+                                    text: "📢 REJOINDRE LE CANAL",
+                                    url: "https://t.me/trafalgar2010dev"
+                                }
+                            ],
+                            [
+                                {
+                                    text: "✅ VÉRIFIER",
+                                    callback_data: "checksub"
+                                }
+                            ]
+                        ]
+                    }
+                }
+            );
+
+        }
+
+        if (fs.existsSync("./assets/intro.mp4")) {
+
+            await bot.sendVideo(
+                chatId,
+                "./assets/intro.mp4",
+                {
+                    caption:
+`👑 TRAFALGAR V2
+
+⚡ CONTROL PANEL
+
+🟢 ACCESS GRANTED`
+                }
+            );
+
+        }
+
+        menu.run(bot, chatId);
+
+    } catch (err) {
+
+        console.log(err);
+
+        bot.sendMessage(
+            chatId,
+            "❌ Impossible de vérifier l'abonnement."
         );
 
     }
-
-    menu.run(bot, chatId);
 
 });
 
