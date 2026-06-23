@@ -29,7 +29,6 @@ inline_keyboard: [
 );
 
 }
-);
 
 }
-});
+};
