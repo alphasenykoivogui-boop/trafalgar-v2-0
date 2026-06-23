@@ -1,19 +1,19 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fs = require("fs");
 
-const { startWhatsApp } = require("./whatsapp/connection");
+const { startWhatsApp } = require("./telegram/whatsapp/connection");
 
-const menu = require("./commands/menu");
-const owner = require("./commands/owner");
-const site = require("./commands/site");
-const premium = require("./commands/premium");
-const pair = require("./commands/pair");
-const status = require("./commands/status");
-const logout = require("./commands/logout");
-const stats = require("./commands/stats");
-const broadcast = require("./commands/broadcast");
-const trafalgaroff = require("./commands/trafalgaroff");
-const stop = require("./commands/stop");
+const menu = require("./telegram/commands/menu");
+const owner = require("./telegram/commands/owner");
+const site = require("./telegram/commands/site");
+const pair = require("./telegram/commands/pair");
+const premium = require("./telegram/commands/premium");
+const status = require("./telegram/commands/status");
+const logout = require("./telegram/commands/logout");
+const stats = require("./telegram/commands/stats");
+const broadcast = require("./telegram/commands/broadcast");
+const trafalgaroff = require("./telegram/commands/trafalgaroff");
+const stop = require("./telegram/commands/stop");
 
 const TOKEN = process.env.BOT_TOKEN;
 
